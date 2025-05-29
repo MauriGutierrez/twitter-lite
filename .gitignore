@@ -1,0 +1,32 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# IDE/editor files
+.idea/
+.vscode/
+*.swp
+*.DS_Store
+
+# Dependency directories
+bin/
+build/
+dist/
+
+# Environment files
+.env
+.env.*
+*.local
+
+# Database files (for local testing)
+*.db
+*.sqlite
+*.log
+F
+# Docker
+docker-data/

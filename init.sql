@@ -1,0 +1,9 @@
+
+CREATE TABLE IF NOT EXISTS users (
+ id TEXT PRIMARY KEY,
+ name TEXT NOT NULL,
+ document TEXT UNIQUE NOT NULL,
+ created_at TIMESTAMPTZ DEFAULT now() NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_users_name ON users (name);
