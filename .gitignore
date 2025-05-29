@@ -20,7 +20,7 @@ dist/
 
 # Environment files
 .env
-.env.*
+env_*.go
 *.local
 
 # Database files (for local testing)
