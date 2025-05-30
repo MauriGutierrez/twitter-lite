@@ -166,3 +166,4 @@ Sample response:
 
 - **Scaling:** Message queues (Kafka/SQS) for async fan-out, background jobs for heavy write operations.
 
+### Contact author: Mauricio Gutierrez, maurix554@gmail.com
