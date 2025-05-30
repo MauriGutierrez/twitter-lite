@@ -23,19 +23,29 @@ func (f *fakeGetTimelineService) Execute(_ context.Context, _ get_timeline.Input
 	return f.Output, f.Err
 }
 
+type TimelineResp struct {
+	ID        string `json:"id"`
+	UserID    string `json:"user_id"`
+	Content   string `json:"content"`
+	Likes     int    `json:"likes"`
+	CreatedAt string `json:"created_at"`
+}
+
 func TestGetTimelineHandler(t *testing.T) {
-	tweetTime := time.Now()
+	tweetTime := time.Now().Truncate(time.Second)
 	mockTweets := []get_timeline.TweetTimeline{
 		{
 			ID:        "tweet_1",
 			UserID:    "usr_456",
 			Content:   "Ualá tweeting",
+			Likes:     0,
 			CreatedAt: tweetTime,
 		},
 		{
 			ID:        "tweet_2",
 			UserID:    "usr_789",
 			Content:   "Second tweet",
+			Likes:     5,
 			CreatedAt: tweetTime,
 		},
 	}
@@ -47,7 +57,7 @@ func TestGetTimelineHandler(t *testing.T) {
 		mockService    *fakeGetTimelineService
 		expectedStatus int
 		expectJSON     bool
-		expectedBody   []map[string]string
+		expectedBody   []TimelineResp
 	}{
 		{
 			name:         "returns timeline successfully",
@@ -58,9 +68,21 @@ func TestGetTimelineHandler(t *testing.T) {
 			},
 			expectedStatus: http.StatusOK,
 			expectJSON:     true,
-			expectedBody: []map[string]string{
-				{"id": "tweet_1", "user_id": "usr_456", "content": "Ualá tweeting", "created_at": tweetTime.Format(time.RFC3339)},
-				{"id": "tweet_2", "user_id": "usr_789", "content": "Second tweet", "created_at": tweetTime.Format(time.RFC3339)},
+			expectedBody: []TimelineResp{
+				{
+					ID:        "tweet_1",
+					UserID:    "usr_456",
+					Content:   "Ualá tweeting",
+					Likes:     0,
+					CreatedAt: tweetTime.Format(time.RFC3339),
+				},
+				{
+					ID:        "tweet_2",
+					UserID:    "usr_789",
+					Content:   "Second tweet",
+					Likes:     5,
+					CreatedAt: tweetTime.Format(time.RFC3339),
+				},
 			},
 		},
 		{
@@ -88,9 +110,21 @@ func TestGetTimelineHandler(t *testing.T) {
 			},
 			expectedStatus: http.StatusOK,
 			expectJSON:     true,
-			expectedBody: []map[string]string{
-				{"id": "tweet_1", "user_id": "usr_456", "content": "Ualá tweeting", "created_at": tweetTime.Format(time.RFC3339)},
-				{"id": "tweet_2", "user_id": "usr_789", "content": "Second tweet", "created_at": tweetTime.Format(time.RFC3339)},
+			expectedBody: []TimelineResp{
+				{
+					ID:        "tweet_1",
+					UserID:    "usr_456",
+					Content:   "Ualá tweeting",
+					Likes:     0,
+					CreatedAt: tweetTime.Format(time.RFC3339),
+				},
+				{
+					ID:        "tweet_2",
+					UserID:    "usr_789",
+					Content:   "Second tweet",
+					Likes:     5,
+					CreatedAt: tweetTime.Format(time.RFC3339),
+				},
 			},
 		},
 	}
@@ -110,7 +144,7 @@ func TestGetTimelineHandler(t *testing.T) {
 			assert.Equal(t, tc.expectedStatus, rr.Code)
 
 			if tc.expectJSON {
-				var parsed []map[string]string
+				var parsed []TimelineResp
 				err := json.Unmarshal(rr.Body.Bytes(), &parsed)
 				require.NoError(t, err)
 				require.Equal(t, tc.expectedBody, parsed)

@@ -1,0 +1,20 @@
+## Business file
+
+- No authentication: User ID is passed as the `X-User-ID` header.
+- User ID format: `"usr_<document>"` (uniqueness enforced).
+- Users: Cannot follow themselves. Re-following is idempotent (safe, does not error).
+- Tweets: 280-character limit, checked at domain level.
+- Likes: Each user can like a tweet once; duplicate likes are forbidden.
+- Follows/Likes: One-directional, unique per user pair (user→followee, user→tweet).
+- Timeline: Aggregates tweets from all followees (including self if following). Paginated (`limit`, `offset`).
+- Timeline returns empty array if no tweets found; never returns error for empty result.
+- Likes are included in timeline tweet response.
+- No tweet deletion or editing.
+- Health endpoint (`/health`) returns service metadata (env, name, version).
+- API returns:
+  - `400 Bad Request` for invalid input,
+  - `404 Not Found` if resource/user not found,
+  - `403 Forbidden` for unauthorized actions (already liked/followed, self-follow),
+  - `409 Conflict` for duplicate user creation,
+  - `500 Internal Server Error` for unhandled failures.
+- All data is in-memory for demo except users (Postgres). In production, tweets/likes/follows would be persisted in scalable storage (e.g., Postgres, Redis, DynamoDB).
