@@ -69,7 +69,7 @@ func TestInMemoryUserRepository(t *testing.T) {
 		repo.Create(ctx, followee)
 
 		assert.NoError(t, repo.Follow(ctx, follower.ID, followee.ID))
-		assert.NoError(t, repo.Follow(ctx, follower.ID, followee.ID)) // again, should be fine
+		assert.NoError(t, repo.Follow(ctx, follower.ID, followee.ID))
 
 		followees, _ := repo.GetUsersFollowedBy(ctx, follower.ID)
 		assert.Equal(t, []string{followee.ID}, followees)

@@ -54,7 +54,7 @@ func TestLikeTweetHandler(t *testing.T) {
 			headerUserID:   "usr_123",
 			tweetIDPathVar: "tweet_abc",
 			mockService:    &fakeLikeTweetService{Err: errors.New("already liked")},
-			expectedStatus: http.StatusInternalServerError, // or 409 depending on your mapping
+			expectedStatus: http.StatusInternalServerError,
 		},
 	}
 
